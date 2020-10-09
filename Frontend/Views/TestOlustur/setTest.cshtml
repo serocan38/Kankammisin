@@ -1,0 +1,31 @@
+﻿@model Frontend.Models.TestModel
+
+@{
+    ViewData["Title"] = "setTest";
+    Layout = "_AnasayfaLayout";
+}
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+    <h1>YeniTest</h1>
+
+</head>
+<body>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form class="form-group" method="post">
+                @Html.TextBoxFor(t => t.TestAdi, "testadi", new { id = "testadi", @class = "form-control" });
+                <div class="form-group">
+                    <input type="Submit" , id="testAdiButon" value="Submit" class="btn float-right login_btn">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>

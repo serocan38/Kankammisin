@@ -1,0 +1,128 @@
+﻿body {
+    font-family: 'Numans', sans-serif;
+}
+
+.cardboyut {
+    opacity: 0.8;
+    height: auto;
+    border-top-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    padding: 35px;
+    background: #feffb9;
+}
+
+
+.cevaplar {
+    background: darkgrey;
+}
+
+.cardarasibosluk {
+    margin-top: 75px;
+}
+
+.cardDiv {
+    border-radius: 40px background: #5cb85c;
+    width: auto;
+    height: auto;
+}
+
+.cardSoruDiv {
+    border-radius: 40px background: #5cb85c;
+    width: 80%;
+    height: auto;
+}
+
+.testolusturbtn {
+    border-radius: 40px;
+    background: #5cb85c;
+    width: 150px;
+    height: 38px;
+}
+
+.testadiedittext {
+    border-radius: 50px;
+    background: lightgoldenrodyellow;
+    width: 200px;
+}
+
+.testolusturDiv {
+    margin-left: 33%;
+    border-radius: 5px;
+}
+
+.secilisorulardiv {
+    margin-left: 15%;
+    margin-top: 25px;
+}
+
+.sorueklediv {
+    width: 30%;
+    margin-top: 20px;
+    margin-left: 35%;
+    margin-bottom: 70px;
+    background: #FFC312;
+    border-radius: 50px;
+    height: 40px;
+}
+
+.sorueklediv2 {
+    width: 30%;
+    margin-top: 20px;
+    margin-left: 35%;
+    background: #FFC312;
+    border-radius: 50px;
+    height: 40px;
+}
+
+.ust {
+    background-color: rgba(0,0,0,0.8) !important;
+    height: 80px;
+    width: 100%;
+}
+
+.fix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    z-index: +1;
+}
+
+.cevaplaredittext {
+    border-radius: 3px;
+    background: burlywood;
+}
+
+.marjin {
+    margin-top: 20px;
+}
+
+.sorusordiv {
+    border-radius: 50px;
+    padding: 3px;
+}
+
+.cevaplardiv {
+    border-radius: 50px;
+    padding: 3px;
+}
+
+.btn-label {
+    position: relative;
+    left: -12px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 3px 0 0 3px;
+}
+
+.btn-labeled {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.btn {
+    margin-bottom: 10px;
+}

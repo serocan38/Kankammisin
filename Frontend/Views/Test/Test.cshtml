@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Frontend.Models.TestModel> 
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_AnasayfaLayout";
+}
+
+<h1>Details</h1>
+<div>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Test Adı</th>
+                <th scope="col">Test Sahibi</th>
+                <th scope="col">Test Soru Sayısı</th>
+                <th scope="col">TestLinki</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>  @Html.DisplayFor(modelItem => item.TestId)</td>
+                        <td> @Html.DisplayFor(modelItem => item.TestAdi)</td>
+                        <td> @Html.DisplayFor(modelItem => item.TestSahibi)</td>
+                        <td> @Html.DisplayFor(modelItem => item.TestSoruSayisi)</td>
+                        <td> @Html.DisplayFor(modelItem => item.TestLinki)</td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+
+</div>
