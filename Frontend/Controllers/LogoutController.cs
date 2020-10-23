@@ -12,6 +12,7 @@ namespace Frontend.Controllers
         public IActionResult Index()
         {
             HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("JWToken");
             return RedirectToAction("Index","Login");
         }
     }

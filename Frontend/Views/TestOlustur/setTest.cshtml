@@ -5,27 +5,45 @@
     Layout = "_AnasayfaLayout";
 }
 <!DOCTYPE html>
-<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"/>
 <head>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-
-
-    <h1>YeniTest</h1>
-
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/testOlustur.css" />
 </head>
-<body>
-
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form class="form-group" method="post">
-                @Html.TextBoxFor(t => t.TestAdi, "testadi", new { id = "testadi", @class = "form-control" });
-                <div class="form-group">
-                    <input type="Submit" , id="testAdiButon" value="Submit" class="btn float-right login_btn">
+<body class="">
+<form class="" method="post">
+    <div class="center">
+        <div class="row arka">
+            <div class="arkaplan">
+                <i style="font-family: candara">- Testinin Adını Girip Testini Oluşturmaya Başla..
+                <br><br>- Testini Oluştururken Doğru Cevapları Belirlemeyi Unutma.</i>
+            </div>
+            <div class="arkaplan2 col">
+                <div class="center row">
+                    <div>
+                        @Html.ValidationMessage("sorusayisi", new { @class = "hata" })
+                        @Html.ValidationMessage("testExist", new { @class = "hata" })
+                    </div>
+                    <div class="row">
+                        @Html.TextBoxFor(t => t.TestAdi, "testadi", new {id = "testadi", @class = "settextEt", placeholder = "Test Adı"})
+                    </div>
+                    <div class="row">
+                        @Html.TextBoxFor(t => t.TestSoruSayisi, "testSoruSayisi", new {id = "testadi", @class = "settextEt", placeholder = "Test Soru Sayısı"})
+                    </div>
                 </div>
-            </form>
+                <div class="form-group center">
+                    <input type="submit" , id="testAdiButon" value="Oluştur" class="btn submit_btn">
+                </div>
+            </div>
         </div>
     </div>
+</form>
 
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/testOlustur.js" asp-append-version="true"></script>
 </body>

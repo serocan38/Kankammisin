@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Frontend.Models;
+using Frontend.Validation;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Frontend.Controllers
 {
     public class TestOlusturController : Controller
     {
         private readonly KankammisinContext _context;
-
         public TestOlusturController(KankammisinContext context)
         {
             _context = context;
@@ -23,39 +21,54 @@ namespace Frontend.Controllers
             return View(_context.Sorular.ToList());
         }
 
-        [HttpGet]
-        public IActionResult YeniTest()
+        public IActionResult YeniTest(int soruSayisi)
         {
+            ViewData["sayi"] = soruSayisi;
             return View();
         }
         [HttpGet]
         public IActionResult setTest()
         {
-            return View();
+                return View();
         }
-
-      
 
         [HttpPost]
         public IActionResult setTest(TestModel testModels)
         {
             var currentUsername = HttpContext.Session.GetString("username");
-        //    string testLinki = "https://localhost:44310/Test/TestCoz?link=" + currentUsername + "-" + testModels.TestId;
+            if (currentUsername == null)
+            {
+                return RedirectToAction("noLogin", "Login", new { url = "https://localhost:44310/test/settest" });
+            }
+
+            if (testModels.TestSoruSayisi>12 || testModels.TestSoruSayisi<3)
+            {
+                ModelState.AddModelError("sorusayisi", "Min Soru Sayısı 3, Max Soru Sayısı 12 Olmalıdır");
+                return View();
+            }
+
+            //    string testLinki = "https://localhost:44310/Test/TestCoz?link=" + currentUsername + "-" + testModels.TestId;
             TestModel testModel = new TestModel
             {
                 TestCozulmeSayisi = 0,
            //     TestLinki = testLinki,
                 TestSahibi = currentUsername,
-                TestSoruSayisi = 10,
+                TestSoruSayisi = testModels.TestSoruSayisi,
                 TestAdi = testModels.TestAdi
             };
+            ExistCheck e = new ExistCheck(_context);
+            if (e.testExist(testModels.TestAdi,currentUsername))
+            {
+                ModelState.AddModelError("testExist", "Aynı İsimde Testiniz Bulunmaktadır.");
+                return setTest();
+            }
+
             _context.Testler.Add(testModel);
             _context.SaveChanges();
             HttpContext.Session.SetInt32("baslik", testModel.TestId);
 
-            return RedirectToAction("YeniTest", "TestOlustur"); ;
+            return RedirectToAction("YeniTest", "TestOlustur", new {soruSayisi = testModels.TestSoruSayisi }); ;
         }
-
 
 
 
@@ -68,9 +81,18 @@ namespace Frontend.Controllers
             var currentUsername = HttpContext.Session.GetString("username");
             var _testId = HttpContext.Session.GetInt32("baslik");
             var testModel = _context.Testler.Find(_testId);
-
+            if (_testId==null)
+            {
+                return RedirectToAction("setTest", "TestOlustur");
+            }
             for (int i = 0; i < soruModel.Count; i++)
             {
+                if (soruModel[i].soru.IsNullOrEmpty() || soruModel[i].cevap1.IsNullOrEmpty() || soruModel[i].cevap2.IsNullOrEmpty() || soruModel[i].cevap3.IsNullOrEmpty() || soruModel[i].cevap4.IsNullOrEmpty()||soruModel[i].dogruCevap==0 )
+                {
+                    ModelState.AddModelError("bos", "Lütfen Tüm Boşlukları Doldurunuz");
+                    return View();
+                }
+
                 soruModel[i].soruAdi = testModel.TestAdi + "-" +(int)( i + 1);
                 soruModel[i].testId = (int)_testId;
                 _context.Sorular.Add(soruModel[i]);

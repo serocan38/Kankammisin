@@ -10,7 +10,7 @@ using Entities.Dtos;
 
 namespace Business.Concrete
 {
-    partial class AuthManager:IAuthService
+    public class AuthManager:IAuthService
 
     {
         private IUserService _userService;

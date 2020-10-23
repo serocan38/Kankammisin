@@ -4,50 +4,59 @@
     ViewData["Title"] = "TestCoz";
     Layout = "~/Views/Shared/_AnasayfaLayout.cshtml";
 }
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"/>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/testOlustur.css" />
+</head>
+<body>
+    @{
 
-<h1>TestCoz</h1>
-@{
-    
-    SoruModel s = new SoruModel();
-    int a =0;
-}
-<div>
-@using (Html.BeginForm("TestCoz", "Test", FormMethod.Post,s))
-{
-    @foreach (var item in Model)
-    {
-
-        <div id="tamSoru" class="tamsoru cardboyut cardarasibosluk">
-            <div class="cardSoruDiv">
-                @Html.DisplayFor(x => item.soru, new {htmlAttributes = new {@class = "", id = "soru" + a + "-1"}})
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    @Html.RadioButtonFor(x => x[a].dogruCevap, 1, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + (a+1) + "-1"}})
-                    @Html.DisplayFor(x => item.cevap1, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-1"}})
-                </div>
-                <div class="col-sm-6">
-                    @Html.RadioButtonFor(x => x[a].dogruCevap, 2, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + (a+1) + "-2"}})
-                    @Html.DisplayFor(x => item.cevap2, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-2"}})
-                </div>
-            </div>  
-            <div class="row">
-                <div class="col-sm-6">
-                    @Html.RadioButtonFor(x => x[a].dogruCevap, 3, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + (a+1) + "-3"}})
-                    @Html.DisplayFor(x => item.cevap3, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-3"}})
-                </div>
-                <div class="col-sm-6">
-                    @Html.RadioButtonFor(x => x[a].dogruCevap, 4, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + (a+1) + "-4"}})
-                    @Html.DisplayFor(x => item.cevap4, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-4"}})
-                </div>
-            </div>
-        </div>
-        @Html.HiddenFor(s=>s[a].testId,item.testId)
-        a++;
+        SoruModel s = new SoruModel();
+        int a = 0;
     }
-    <div class="center form-group">
-        <input type="Submit" , id="cozButon" value="Kabul Et" class="row btn login_btn ">
-    </div>
-}
+    <div>
+        @using (Html.BeginForm("TestCoz", "Test", FormMethod.Post, s))
+        {
+            @foreach (var item in Model)
+            {
 
-</div>
+                <div class="tamsoru cardboyut cardarasibosluk">
+                    <div class="cardSoruDiv soru">
+                        @Html.DisplayFor(x => item.soru, new { htmlAttributes = new { @class = "", id = "soru" + a + "-1" } })
+                    </div>
+                    <div class="row centerr">
+                        <div id="@("1" + a)" class="secenek cardsecenek1" onClick="reply_click(this.id,)">
+                            <a hidden> @Html.RadioButtonFor(x => x[a].dogruCevap, 1, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton1"+a}})</a>
+                            @Html.DisplayFor(x => item.cevap1, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-1"}})
+                        </div>
+                        <div id="@("2" + a)" class="secenek  cardsecenek2" onClick="reply_click(this.id)">
+                            <a hidden> @Html.RadioButtonFor(x => x[a].dogruCevap, 2, new {htmlAttributes = new {GroupName = "radio" + a, @class = "form-control", id = "radiobuton2"+a}})</a>
+                            @Html.DisplayFor(x => item.cevap2, new {htmlAttributes = new {@class = "form-control", id = "cevap" + a + "-2"}})
+                        </div>
+                    </div>
+                    <div class="row centerr">
+                        <div id="@("3" + a)" class="secenek  cardsecenek3" onClick="reply_click(this.id)">
+                            <a hidden>   @Html.RadioButtonFor(x => x[a].dogruCevap, 3, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton3"+a } })</a>
+                            @Html.DisplayFor(x => item.cevap3, new { htmlAttributes = new { @class = "form-control", id = "cevap" + a + "-3" } })
+                        </div>
+                        <div id="@("4" + a)" class="secenek  cardsecenek4" onClick="reply_click(this.id)">
+                            <a hidden>   @Html.RadioButtonFor(x => x[a].dogruCevap, 4, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton4" + a } })</a>
+                            @Html.DisplayFor(x => item.cevap4, new { htmlAttributes = new { @class = "form-control", id = "cevap" + a + "-4" } })
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(s => s[a].testId, item.testId)
+                a++;
+            }
+            <div class="center textcenter form-group">
+                <input type="Submit" , id="cozButon" value="Kabul Et" class=" submit_btn ">
+            </div>
+        }
+
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/testcoz.js" asp-append-version="true"></script>
+</body>

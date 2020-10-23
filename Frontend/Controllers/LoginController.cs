@@ -1,51 +1,106 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Business.Abstract;
+using Core.Utilities.Security.Jwt;
 using Frontend.Models;
-using IdentityServer4.Extensions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using Frontend.Validation;
+using IdentityModel;
+using IdentityServer4.Services;
+using IdentityServer4.Validation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Frontend.Controllers
 {
     public class LoginController : Controller
     {
-        const string SessionName = "_Name";
+        Uri baseAddress = new Uri("https://localhost:44388/api/");
+        private IAuthService _authService;
+        private IUserService _userService;
 
-     
+
+        public LoginController(IAuthService authService, IUserService userService)
+        {
+            _authService = authService;
+            _userService = userService;
+
+        }
+
+
 
 
         public IActionResult Index()
         {
-         //   string username = userModel.kullaniciAdi;
-         //   sendUser(userModel);
             return View();
         }
 
-    /*    [HttpPost]
-        public ActionResult SendUser(UserModel userModel)
+        [HttpPost]
+        public async Task<ActionResult> Index(LoginsModel loginsModel)
         {
-            string username = userModel.kullaniciAdi;
-            //   var user =  _userManager.GetUserAsync(HttpContext.User);
-            TempData["mydata"] = username;
-            return RedirectToAction("GetTest", "Test",TempData["mydata"]);
-        }*/
-         [HttpPost]
+            var httpclient = new HttpClient();
+                using (var handler = new HttpClientHandler())
+            {
+                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
+                using (var client = new HttpClient(handler))
+                {
+                    client.BaseAddress = baseAddress;
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type",
+                        "application/x-www-form-urlencoded; charset=utf-8");
+
+                    HttpResponseMessage Res = await client.GetAsync("auth/islogin?id=" + loginsModel.id +
+                                                                    "&password=" + loginsModel.password);
+                    
+                    if (Res.IsSuccessStatusCode)
+                    {
+                        var result = _userService.GetByUsername(loginsModel.id);
+                        HttpContext.Session.SetString("username", loginsModel.id); 
+                        var token = _authService.CreateAccessToken(result);
+                        HttpContext.Session.SetString("JWToken", token.Data.Token);
+                        ViewData["username"] = loginsModel.id;
+
+
+
+                        return RedirectToAction("GetTest", "Test");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("kullanicihata", "Kullanıcı Adı veya Şifre Yanlış");
+                        return View();
+                    }
+                }
+            }
+        
+        }
+
+        [HttpPost]
         public ActionResult setUser(UserModel userModel)
         {
             HttpContext.Session.SetString("username", userModel.kullaniciAdi);
-
-            return RedirectToActionPreserveMethod("getTest","Test"); ;
+            return RedirectToAction("getTest", "Test"); ;
         }
+
+        [HttpPost]
+        public ActionResult noLogin(string url)
+        {
+            return Redirect(url);
+        }
+
+        [HttpGet]
+        public ActionResult noLogin()
+        {
+            return View();
+        }
+
 
 
     }

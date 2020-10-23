@@ -1,5 +1,5 @@
 ﻿
-@model Frontend.Models.UserModel
+@model Frontend.Models.LoginsModel
 @{
     ViewData["Title"] = "Giriş Yap";
 }
@@ -9,9 +9,10 @@
 <head>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  
 </head>
-<body background="Images/friends.jpg">
+<body background="Images/friends1.jpg">
 
 
 
@@ -22,35 +23,40 @@
                 <div class="card-header center">
                     <h3>Giriş Yap</h3>
                 </div>
-                <span hidden id="hata1" style="color: #d73814">Kullanıcı adı veya şifre yanlış</span>
+                <div class="center">
+                    @Html.ValidationMessage("kullanicihata" ,new { @class = "hata" })
+                </div>
                 <div class="card-body">
 
-                    @using (Html.BeginForm("setUser", "Login", FormMethod.Post))
-                    {
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            </div>
-                            @Html.TextBoxFor(m => m.kullaniciAdi, "kullaniciadi", new { id = "kullaniciadi", @class = "form-control",placeholder="Kullanıcı Adı" });
-                            @*<input type="text" id="kullaniciadi" class="form-control" placeholder="Kullanıcı adı">*@
+                @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+                {
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        @Html.TextBoxFor(m => m.id, "kullaniciadi", new {id = "kullaniciadi", @class = "form-control", placeholder = "Kullanıcı Adı"})
 
+                        @*<input type="text" id="kullaniciadi" class="form-control" placeholder="Kullanıcı adı">*@
+
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        <div class="input-group form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <input type="password" id="password" class="form-control" placeholder="Parola">
-                        </div>
-                        <div class="remember">
-                            <input type="checkbox" class="">Beni hatırla
-                        </div>
-                        <div class="center form-group">
-                            <input type="Submit" , id="girisYapButon" value="Giriş Yap" class="row btn login_btn ">
-                        </div>
-                       
-                    }
+                        @Html.TextBoxFor(m => m.password, "password", new {id = "password", @class = "form-control", placeholder = "Şifre" ,type="password"})
+
+                        @*   <input type="password" id="password" class="form-control" placeholder="Parola">*@
+                    </div>
+                    <div class="remember">
+                        <input type="checkbox" class="">Beni hatırla
+                    </div>
+                    <div class="center form-group">
+                        <input type="submit" , id="girisYapButon" value="Giriş Yap" class="row btn login_btn ">
+                    </div>
+
+                }
                     <div class="center">
-                        <a href="/register/Index"  id="registeregitButon" value="Uye Ol" class=" btn register_btn ">Kayıt Ol</a>
+                        <a href="/register/Index" id="registeregitButon" value="Uye Ol" class=" btn register_btn ">Kayıt Ol</a>
                     </div>
 
 
@@ -83,17 +89,22 @@
 
                     *@
 
-                <div class="card-footer footer_margin">
-                    @*  <div class="d-flex justify-content-center links">
-            Hala hesabın yok mu?<a asp-controller="Register" asp-action="Index">Kayıt Ol</a>
-        </div>*@
-                    <div class="d-flex justify-content-center">
-                        <a href="#"> Şifremi Unuttum</a>
-                    </div>
+                    <div class="card-footer footer_margin">
+                        @*  <div class="d-flex justify-content-center links">
+                                Hala hesabın yok mu?<a asp-controller="Register" asp-action="Index">Kayıt Ol</a>
+                            </div>*@
+                        <div class="d-flex justify-content-center">
+                            <a href="#"> Şifremi Unuttum</a>
+                        </div>
 
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    </body>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/login.js" asp-append-version="true"></script>
+</body>

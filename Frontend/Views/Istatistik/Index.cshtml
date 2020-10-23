@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Frontend.Models.IstatistikModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AnasayfaLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Istatistik.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+</head>
+<body>
+    <div class="jumbotron body2">
+        <h1 class="center">İstatistikler</h1>
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Çözen</th>
+                    <th>Test Adı</th>
+                    <th>Doğru Sayısı</th>
+                    <th>Yanlış Sayısı</th>
+                    <th>Kankalık</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.testAdi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DogruSayisi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.YanlisSayisi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Kankalik)
+                            </td>
+                        <td>
+                            @Html.ActionLink("İncele", "CozulmusTest", "Istatistik", item, null)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

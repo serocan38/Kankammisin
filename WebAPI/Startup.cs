@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.Jwt;
@@ -84,6 +85,7 @@ namespace WebAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

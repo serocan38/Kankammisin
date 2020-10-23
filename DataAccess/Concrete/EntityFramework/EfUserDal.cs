@@ -14,7 +14,6 @@ namespace DataAccess.Concrete.EntityFramework
     public class EfUserDal : EfEntityRepositoryBase<User, KankammisinContext>, IUserDal
 
     {
-
         public List<OperationClaim> GetClaims(User user)
         {
             using (var context = new KankammisinContext())

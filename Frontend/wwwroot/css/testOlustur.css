@@ -9,120 +9,143 @@
     border-bottom-left-radius: 50px;
     border-bottom-right-radius: 50px;
     padding: 35px;
-    background: #feffb9;
-}
-
-
-.cevaplar {
-    background: darkgrey;
+    background: #fff1f1;
 }
 
 .cardarasibosluk {
-    margin-top: 75px;
+    margin-top: 5%;
 }
 
-.cardDiv {
-    border-radius: 40px background: #5cb85c;
-    width: auto;
-    height: auto;
+.centerr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.soru {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.cevap {
+    font-size: 14px;
+    text-align: center;
 }
 
 .cardSoruDiv {
-    border-radius: 40px background: #5cb85c;
-    width: 80%;
-    height: auto;
+    border-radius: 10px;
+    background: #e8dbdb;
+    padding: 5px 15px 5px 15px;
+    text-align: center;
+    padding: 10px;
 }
 
-.testolusturbtn {
-    border-radius: 40px;
-    background: #5cb85c;
-    width: 150px;
-    height: 38px;
+.textcenter {
+    text-align: center;
 }
 
+.secenek {
+    width: 47.5%;
+    text-align: center
+}
+
+.cardsecenek1 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-left: 15px;
+}
+
+.cardsecenek2 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-right: 15px;
+}
+
+.cardsecenek3 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-left: 15px;
+}
+
+.cardsecenek4 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-right: 15px;
+}
 .testadiedittext {
     border-radius: 50px;
     background: lightgoldenrodyellow;
     width: 200px;
 }
-
-.testolusturDiv {
-    margin-left: 33%;
-    border-radius: 5px;
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.yenitest_text {
+    margin-top: 10px;
 }
 
-.secilisorulardiv {
-    margin-left: 15%;
-    margin-top: 25px;
+.submit_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 120px;
+    border-radius: 20px;
+    margin-top: 15px;
+    border: 0;
+    padding: 5px;
+    text-align: center;
+
 }
 
-.sorueklediv {
-    width: 30%;
-    margin-top: 20px;
-    margin-left: 35%;
-    margin-bottom: 70px;
-    background: #FFC312;
-    border-radius: 50px;
-    height: 40px;
+.testadi_edittext {
+    border-radius: 20px;
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 10px 50px 10px 50px;
+    border: 0;
+    
+}
+.arkaplan {
+    width: 400px;
+    height: 600px;
+    border-radius: 15px;
+    background-color: #e9ecef;
+    align-self: center;
+    padding: 20px
+}
+.arkaplan2 {
+    width: 150px;
+    height: 250px;
+    border-radius: 15px;
+    background-color: #ffc0a2;
+    align-self: center;
+    margin-left: -200px;
+    padding-top: 40px;
+    box-shadow: -8px 8px 10px -3px rgba(0,0,0,0.75);
+}
+.arka {
+    width: 600px;
+    margin-top: 100px;
+}
+.hata {
+    color: red;
+    font-size: 10px;
 }
 
-.sorueklediv2 {
-    width: 30%;
-    margin-top: 20px;
-    margin-left: 35%;
-    background: #FFC312;
-    border-radius: 50px;
-    height: 40px;
-}
-
-.ust {
-    background-color: rgba(0,0,0,0.8) !important;
-    height: 80px;
-    width: 100%;
-}
-
-.fix {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0;
-    z-index: +1;
-}
-
-.cevaplaredittext {
-    border-radius: 3px;
-    background: burlywood;
-}
-
-.marjin {
-    margin-top: 20px;
-}
-
-.sorusordiv {
-    border-radius: 50px;
-    padding: 3px;
-}
-
-.cevaplardiv {
-    border-radius: 50px;
-    padding: 3px;
-}
-
-.btn-label {
-    position: relative;
-    left: -12px;
-    display: inline-block;
-    padding: 6px 12px;
-    background: rgba(0,0,0,0.15);
-    border-radius: 3px 0 0 3px;
-}
-
-.btn-labeled {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.btn {
-    margin-bottom: 10px;
+.settextEt {
+    border-radius: 20px;
+    background-color: #e9ecef;
+    text-align: center;
+    padding: 10px 50px 10px 50px;
+    border: 0;
+    margin-top: 10px;
 }

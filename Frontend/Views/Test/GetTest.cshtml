@@ -4,12 +4,27 @@
     ViewData["Title"] = "GetTest";
     Layout = "~/Views/Shared/_AnasayfaLayout.cshtml";
 }
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/test.css"/>
 
-<h1>GetTest</h1>
+</head>
+<body >
+@{
+    int i = 0;
+}
 
+<div class="jumbotron body2">
 
-<h1>Details</h1>
-<div>
+    <div class="center">
+        <h1>Testlerim</h1>
+    </div>
     <table class="table table-hover table-bordered">
         <thead class="thead-dark">
         <tr>
@@ -25,14 +40,32 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>  @Html.DisplayFor(modelItem => item.TestId)</td>
+                <td> @Html.DisplayFor(modelItem => item.TestId)</td>
                 <td> @Html.DisplayFor(modelItem => item.TestAdi)</td>
                 <td> @Html.DisplayFor(modelItem => item.TestSahibi)</td>
                 <td> @Html.DisplayFor(modelItem => item.TestSoruSayisi)</td>
-                <td> @Html.DisplayFor(modelItem => item.TestLinki)</td>
+                <td>
+                    <a id="link">@Html.DisplayFor(modelItem => item.TestLinki, new {id = "linkk" + i})</a>
+                    <button class="far fa-copy kopyalaicon" onclick="kopyalama(this)"></button>
+                </td>
+                <td>
+                    @Html.ActionLink("Sil", "TestSil", "Test", item, null)
+                </td>
             </tr>
+            @Html.ValidationMessage("bostest")
+
+            i++;
         }
         </tbody>
     </table>
 
 </div>
+
+
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/test.js" asp-append-version="true"></script>
+
+</body>

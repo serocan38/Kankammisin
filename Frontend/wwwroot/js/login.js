@@ -1,4 +1,5 @@
-﻿$('#form').submit( function() {
+﻿$(document).ready(function() {
+    $("#form1123213123213213213213213123213123123123213").submit(function(e) {
 
         $.support.cors = true;
         var ItemJSON = {
@@ -20,7 +21,6 @@
 
                 //  $.post("Test/GetTest/", { kullaniciAdi: users.kullaniciadi }, function (data) {});
                 //   var url = '/Test/gettest?kullaniciadi=' + users.kullaniciadi;
-                   window.location.href = "test/test";
                 //
 
             },
@@ -58,12 +58,12 @@
                     console.log("DENEMEMEMEMEMEMEM : " + result);
                     if (result === "Giriş Başarılı") {
                         console.log("TAMAM");
-
-
+                    } else {
+                        window.location.href = "Login/Index";
                     }
                 }
             });
 
     });
 
-
+})

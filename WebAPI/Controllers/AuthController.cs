@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Core.Entities.Concrete;
+using DataAccess.Concrete.EntityFramework.Context;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +21,15 @@ namespace WebAPI.Controllers
     {
         private IAuthService _authService;
         private IUserService _userService;
+        private IUserClaimService _userClaimService;
         private bool giris;
+        
 
-        public AuthController(IAuthService authService, IUserService userService)
+        public AuthController(IAuthService authService, IUserService userService,IUserClaimService userClaimService)
         {
             _authService = authService;
             _userService = userService;
+            _userClaimService = userClaimService;
         }
         [HttpOptions("{login}")]
         public IActionResult PreflightRoute(int id)
@@ -42,7 +47,7 @@ namespace WebAPI.Controllers
 
 
 
-        [HttpGet("login")]
+        [HttpGet("loginn")]
         [EnableCors("sero")]
         public ActionResult isLogin()
         {
@@ -61,26 +66,29 @@ namespace WebAPI.Controllers
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
-                return BadRequest("Başarısız1");
+                return Ok("Başarısız1");
             }
             else
             {
                 return Ok("Giriş Başarılı");
             }
 
-          //  var result = _authService.CreateAccessToken(userToLogin.Data);
-          //  if (result.Success)
-          //  {
-          //      return Ok();
-          //  }
+            //  var result = _authService.CreateAccessToken(userToLogin.Data);
+            //  if (result.Success)
+            //  {
+            //      return Ok();
+            //  }
             //return BadRequest("Başarısız2");
         }
 
         [HttpGet("islogin")]
         [EnableCors("sero")]
 
-        public IActionResult IsLogin(UserForLoginDto userForLoginDto)
+        public IActionResult IsLogin(string id, string password)
         {
+            UserForLoginDto userForLoginDto = new UserForLoginDto();
+            userForLoginDto.Id = id;
+            userForLoginDto.password = password;
             var userToLogin = _authService.Login(userForLoginDto);
             if (!userToLogin.Success)
             {
@@ -91,7 +99,8 @@ namespace WebAPI.Controllers
                 var result = _userService.GetByUsername(userForLoginDto.Id);
                 if (result.KullaniciAdi == userForLoginDto.Id)
                 {
-                    return Ok(result);
+              //      var token =  _authService.CreateAccessToken(result);
+                    return Ok();
                 }
 
                 return BadRequest("Hata");
@@ -101,19 +110,32 @@ namespace WebAPI.Controllers
 
         [HttpPost("register")]
         [EnableCors("sero")]
-
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
+            if (userForRegisterDto.Email.Equals(null) || userForRegisterDto.KullaniciAdi.Equals(null) || userForRegisterDto.ad.Equals(null) || userForRegisterDto.soyad.Equals(null))
+            {
+                return BadRequest("Lütfen Boş Yerleri Doldurunuz");
+
+            }
+
             var userExist = _authService.UserExist(userForRegisterDto.KullaniciAdi);
             if (!userExist.Success)
             {
                 return BadRequest("Kullanıcı Mevcut");
             }
 
+
             var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.password);
             var result = _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
             {
+                var current = _userService.GetByUsername(userForRegisterDto.KullaniciAdi);
+                UserOperationClaim userOperation = new UserOperationClaim
+                {
+                    UserId = current.ID,
+                    OperationClaimId = 2
+                };
+                _userClaimService.Add(userOperation);
                 return Ok("Başarıyla Üye Olundu");
             }
 
@@ -128,23 +150,29 @@ namespace WebAPI.Controllers
         public IActionResult GetList()
         {
             var result = _userService.GetUserList().Data;
-            
-                return Ok(result);
+
+            return Ok(result);
         }
 
 
         [HttpGet("getbyusername")]
         [EnableCors("sero")]
-
+      //  [Authorize(Roles="Product.List")]
         public IActionResult GetByUsername(string username)
         {
             var result = _userService.GetByUsername(username);
-            if (result.KullaniciAdi==username)
+            var exist = _authService.UserExist(username);
+            if (exist.Success || result.KullaniciAdi == username)
             {
-                return Ok(result);
+                    return Ok(result);
             }
 
-            return BadRequest("Hata");
+            else
+            {
+                return BadRequest("Hata");
+
+            }
+
         }
     }
 }

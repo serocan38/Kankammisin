@@ -1,0 +1,67 @@
+﻿@model Frontend.Models.UserClaimModel
+
+@{
+    ViewData["Title"] = "Aistatistik";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Aistatistik</h1>
+@{
+    string[] kturu = new String[]{"Admin","Kullanici"};
+    List<string> a = new List<string>();
+    a.Add("admin");
+    a.Add("kullanici");
+}
+<div>
+
+@using (Html.BeginForm("Aistatistik", "Admin", FormMethod.Post))
+{
+    <h4>UserModel</h4>
+    <hr/>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.userModel.ad)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.userModel.ad)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.userModel.soyad)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.userModel.soyad)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.userModel.email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.userModel.email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.userModel.kullaniciAdi)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.userModel.kullaniciAdi)
+        </dd>
+        <dt class="col-sm-2">
+            Kullanıcı Türü
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.kullaniciTuru)
+
+            @Html.HiddenFor(m => m.userModel.Id)
+            @if (!Model.kullaniciTuru.Equals("Kullanici"))
+            {
+                <input type="submit" value="Kullanici Yap"/>
+            }
+            else
+            {
+            <input type="submit" value="Admin yap"/>
+
+            }
+
+
+        </dd>
+    </dl>
+        }
+</div>

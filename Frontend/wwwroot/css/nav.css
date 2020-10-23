@@ -1,0 +1,13 @@
+﻿.customNavbar {
+    background-color: #FDD55E;
+    justify-content: space-between;
+    padding: 0% 0% 5% 5%;
+}
+.item {
+    color: #eee;
+}
+.logo {
+    background-image: url("../Images/KankammisinLogom.png");
+    width: 50px;
+    height: 50px;
+}

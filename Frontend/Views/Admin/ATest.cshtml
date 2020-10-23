@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Frontend.Models.TestModel>
+
+@{
+    ViewData["Title"] = "ATest";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>ATest</h1>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Admin</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TestAdi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TestLinki)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TestSahibi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TestSoruSayisi)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TestCozulmeSayisi)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TestAdi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TestLinki)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TestSahibi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TestSoruSayisi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TestCozulmeSayisi)
+                        </td>
+                        <td>
+                            @Html.ActionLink("İncele", "ATestGor", "Admin", item, null)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Sil", "AtestSil", "Admin", item, null)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>

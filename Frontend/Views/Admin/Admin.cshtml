@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Frontend.Models.UserModel>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Admin</title>
+</head>
+<body>
+    <div class="jumbotron" style="margin-top: 50px">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ad)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.soyad)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.kullaniciAdi)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.soyad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.kullaniciAdi)
+                    </td>
+                    <td>
+                        @Html.ActionLink("İncele", "Aistatistik", "Admin", item, null)
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

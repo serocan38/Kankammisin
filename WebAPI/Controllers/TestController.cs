@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         [HttpGet("getall")]
         [EnableCors("sero")]
 
-        //   [Authorize(Roles = "Product.List")]
+        //  [Authorize(Roles = "Product.List")]
 
         public IActionResult GetList()
         {

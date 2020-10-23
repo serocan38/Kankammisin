@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +9,9 @@ namespace Frontend.Models
 {
     public class LoginsModel : IdentityUser
     {
-        [PersonalData]
-        public string Username { get; set; }
-        [PersonalData]
-        public string Password { get; set; }
+        [Required]
+        public string id { get; set; }
+        [Required]
+        public string password { get; set; }
     }
 }

@@ -1,0 +1,84 @@
+﻿.cardboyut {
+    opacity: 0.8;
+    height: auto;
+    border-top-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    padding: 35px;
+    background: #fff1f1;
+}
+
+.cardarasibosluk {
+    margin-top: 75px;
+}
+.center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.soru {
+    font-weight: bold;
+    font-size: 16px;
+}
+.cevap {
+    font-size: 14px;
+    text-align: center;
+}
+.inputArkaplan {
+    border-radius: 10px;
+    border: 0;
+    background-color: #e9ecef;
+}
+
+.cardSoruDiv {
+    border-radius: 10px;
+    background: #e8dbdb;
+    padding: 5px 15px 5px 15px;
+    text-align: center;
+    padding: 10px;
+}
+.textcenter {
+    text-align: center;
+}
+.secenek {
+    width: 47.5%;
+}
+
+.cardsecenek1 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-left: 15px;
+}
+.cardsecenek2 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-right: 15px;
+}
+.cardsecenek3 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-left: 15px;
+}
+.cardsecenek4 {
+    border-radius: 10px;
+    padding: 5px 15px 5px 15px;
+    margin-top: 10px;
+    background-color: #e8dbdb;
+    margin-right: 15px;
+}
+.submit_btn {
+    color: black;
+    background-color: #FFC312;
+    width: 120px;
+    border-radius: 20px;
+    margin-top: 15px;
+    border: 0;
+    padding: 5px;
+    text-align: center;
+}
