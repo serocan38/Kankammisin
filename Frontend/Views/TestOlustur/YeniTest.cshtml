@@ -1,4 +1,4 @@
-﻿@model List<Frontend.Models.SoruModel> 
+﻿@model List<Frontend.Models.SoruModel>
 @{
     ViewData["Title"] = "YeniTest";
     Layout = "_AnasayfaLayout";
@@ -10,50 +10,55 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/cozulmusTest.css" />
 </head>
-<body>
-    <form class="form-group" method="post">
-        <div id="app" class="">
-            @{
-                List<SoruModel> userModels = new List<SoruModel>();
-                int sayi = (int) ViewData["sayi"];
-            }
-            @for (var a = 0; a < sayi; a++)
-            {
-                <div id="tamSoru" class="cardboyut cardarasibosluk">
-                    <div class="cardSoruDiv soru">
-                        @Html.LabelFor(x => x[a].soru, new { htmlAttributes = new { @class = "", id = "Soru" + a + "-1" } })
-                        @Html.TextBoxFor(x => x[a].soru, new { @class = "inputArkaplan", id = "soru" + a + "-1" })
+<body background="/Images/bg2.jpeg">
+    <div class="body2">
+        <form class="form-group" method="post">
+            <div id="app" class="">
+                @{
+                    List<SoruModel> userModels = new List<SoruModel>();
+                    int sayi = (int)ViewData["sayi"];
+                }
+                @for (var a = 0; a < sayi; a++)
+                {
+                    <div id="tamSoru" class="cardboyut cardarasibosluk">
+                        <div class="cardSoruDiv soru">
+                            @Html.LabelFor(x => x[a].soru, new { htmlAttributes = new { @class = "", id = "Soru" + a + "-1" } })
+                            @Html.TextBoxFor(x => x[a].soru, new { @class = "inputArkaplan", id = "soru" + a + "-1" })
+                        </div>
+                        <div class="row center">
+                            <div class="secenek  cardsecenek1 cevap">
+                                @Html.RadioButtonFor(x => x[a].dogruCevap, 1, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-1" } })
+                                @Html.LabelFor(x => x[a].cevap1, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-1" } })
+                                <a>@Html.TextBoxFor(x => x[a].cevap1, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-1" })</a>
+                            </div>
+                            <div class="secenek  cardsecenek2 cevap">
+                                @Html.RadioButtonFor(x => x[a].dogruCevap, 2, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-2" } })
+                                @Html.LabelFor(x => x[a].cevap2, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-2" } })
+                                @Html.TextBoxFor(x => x[a].cevap2, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-2" })
+                            </div>
+                        </div>
+                        <div class="row center">
+                            <div class="secenek  cardsecenek3 cevap">
+                                @Html.RadioButtonFor(x => x[a].dogruCevap, 3, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-3" } })
+                                @Html.LabelFor(x => x[a].cevap3, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-3" } })
+                                @Html.TextBoxFor(x => x[a].cevap3, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-3" })
+                            </div>
+                            <div class="secenek  cardsecenek4 cevap">
+                                @Html.RadioButtonFor(x => x[a].dogruCevap, 4, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-4" } })
+                                @Html.LabelFor(x => x[a].cevap4, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-4" } })
+                                @Html.TextBoxFor(x => x[a].cevap4, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-4" })
+                            </div>
+                        </div>
                     </div>
-                    <div class="row center">
-                        <div class="secenek  cardsecenek1 cevap">
-                            @Html.RadioButtonFor(x => x[a].dogruCevap, 1, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-1" } })
-                            @Html.LabelFor(x => x[a].cevap1, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-1" } })
-                            <a>@Html.TextBoxFor(x => x[a].cevap1, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-1" })</a>
-                        </div>
-                        <div class="secenek  cardsecenek2 cevap">
-                            @Html.RadioButtonFor(x => x[a].dogruCevap, 2, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-2" } })
-                            @Html.LabelFor(x => x[a].cevap2, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-2" } })
-                            @Html.TextBoxFor(x => x[a].cevap2, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-2" })
-                        </div>
+                }
+                <div class="container" style="margin-top: 3%">
+                    @Html.ValidationMessage("bos", new { @class = "hata row centerr" })
+                    <div class="centerr row">
+                        <input type="submit" value="Test Oluştur" class="submit_btn" />
                     </div>
-                    <div class="row center">
-                        <div class="secenek  cardsecenek3 cevap">
-                            @Html.RadioButtonFor(x => x[a].dogruCevap, 3, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-3" } })
-                            @Html.LabelFor(x => x[a].cevap3, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-3" } })
-                            @Html.TextBoxFor(x => x[a].cevap3, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-3" })
-                        </div>
-                        <div class="secenek  cardsecenek4 cevap">
-                            @Html.RadioButtonFor(x => x[a].dogruCevap, 4, new { htmlAttributes = new { GroupName = "radio" + a, @class = "form-control", id = "radiobuton" + a + "-4" } })
-                            @Html.LabelFor(x => x[a].cevap4, new { htmlAttributes = new { @class = "form-control", id = "cevaptext" + a + "-4" } })
-                            @Html.TextBoxFor(x => x[a].cevap4, new { @class = "form-control inputArkaplan", id = "cevap" + a + "-4" })
-                        </div>
-                    </div>
+
                 </div>
-            }
-            <div class="center">
-                @Html.ValidationMessage("bos", new { @class = "hata" })
-                <input type="submit" value="Test Oluştur" class="submit_btn" />
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </body>

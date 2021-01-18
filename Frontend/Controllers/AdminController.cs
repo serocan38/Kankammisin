@@ -27,9 +27,12 @@ namespace Frontend.Controllers
         {
             var tumKullanicilar = _kankammisinContext.Users.ToList();
             IList<UserModel> uList = tumKullanicilar;
+            ViewData["username"] = HttpContext.Session.GetString("username"); 
+
             return View(tumKullanicilar);
         }
         [Authorize(Roles = "Admin")]
+        [Route("/istatiktik")]
 
         public ActionResult Aistatistik(UserModel userModel)
         {
@@ -49,6 +52,7 @@ namespace Frontend.Controllers
 
             return View(userClaimModel);
         }
+        [Route("/istatistik")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult Aistatistik(UserClaimModel userClaimModel)
@@ -72,10 +76,12 @@ namespace Frontend.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [Route("/atest")]
         public ActionResult ATest()
         {
             var tumTestler = _kankammisinContext.Testler.ToList();
             IList<TestModel> uList = tumTestler;
+            ViewData["username"] = HttpContext.Session.GetString("username"); ;
             return View(tumTestler);
         }
 

@@ -99,8 +99,8 @@ namespace WebAPI.Controllers
                 var result = _userService.GetByUsername(userForLoginDto.Id);
                 if (result.KullaniciAdi == userForLoginDto.Id)
                 {
-              //      var token =  _authService.CreateAccessToken(result);
-                    return Ok();
+                  var token =  _authService.CreateAccessToken(result);
+                    return Ok(token);
                 }
 
                 return BadRequest("Hata");

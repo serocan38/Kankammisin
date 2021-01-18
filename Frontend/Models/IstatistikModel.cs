@@ -13,6 +13,7 @@ namespace Frontend.Models
         public string cozen { get; set; }
         public string cozulen { get; set; }
         public string testAdi { get; set; }
+        public int testId { get; set; }
         public int DogruSayisi { get; set; }
         public int YanlisSayisi { get; set; }
         public string Kankalik { get; set; }

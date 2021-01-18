@@ -1,0 +1,82 @@
+﻿@model Frontend.Models.RegisterModel
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+}
+
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+</head>
+<body background="/Images/bg1.jpeg">
+
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="cardgiris">
+            <h3 class="headerLogin">Kayıt Ol</h3>
+            <hr/>
+                <div class="card-body1">
+
+                    @using (Html.BeginForm("Aregister", "Register",FormMethod.Post))
+                    {
+                        <p><span id="hataKullaniciAdi" class="emsg hidden">Lütfen Geçerli Kullanıcı Adı Giriniz</span></p>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            @Html.TextBoxFor(m => m.kullaniciadi, "kullaniciadi", new { id = "kullaniciadi", @class = "form-control", placeholder = "Kullanıcı Adı" })
+                        </div>
+
+                        <p><span id="hataAd" class="emsg hidden">Lütfen Geçerli Ad Giriniz</span></p>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            @Html.TextBoxFor(m => m.ad, "ad", new { id = "ad", @class = "form-control", placeholder = "Ad", type = "text" })
+                        </div>
+
+                        <p><span id="hataSoyad" class="emsg hidden">Lütfen Geçerli Kullanıcı Soyad Giriniz</span></p>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            @Html.TextBoxFor(m => m.soyad, "soyad", new { id = "soyad", @class = "form-control", placeholder = "Soyad", type = "text" })
+                        </div>
+
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            @Html.TextBoxFor(m => m.email, "email", new { id = "email", @class = "form-control", placeholder = "Email", type = "text" })
+                        </div>
+
+                        <p><span id="hataSifre" class="emsg hidden">Şifre Minimum 3 Karakterli olmalı</span></p>
+                        <div class="input-group form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            @Html.TextBoxFor(m => m.password, "password", new { id = "password", @class = "form-control", placeholder = "Şifre", type = "password" })
+                        </div>
+                        <div class="form-group center">
+                            <input type="submit" id="" value="Kayıt Ol" class="btn login_btn">
+                        </div>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center links">
+                        <a style="color: #ff2255" class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">Zaten Bir Hesabım Var</a>
+                    </div>
+                    <div class="center">
+                        <a href="/login/Index" id="registeregitButon" value="Hesabım Var" class=" btn loginn_btn ">Giriş Yap</a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

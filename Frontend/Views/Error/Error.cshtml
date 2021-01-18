@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "GetTest";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/hata.css" />
+
+</head>
+<body background="/Images/bg2.jpeg">
+    <div class="body2">
+        @Html.ValidationMessage("error", new { @class = "hata center" })
+        <a href="/" class="center yonlendir" >Siteye gitmek için buraya tıklayınız</a>
+    </div>
+</body>
+</html>

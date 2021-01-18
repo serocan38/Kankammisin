@@ -1,0 +1,74 @@
+﻿@model Frontend.Models.TestAdiTestModel
+
+@{
+    ViewData["Title"] = "TestIstatistik";
+    Layout = "~/Views/Shared/_AnasayfaLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Istatistik.css" />
+</head>
+<body background="/Images/bg2.jpeg">
+    <div class="row " style="margin-top: 50px">
+        <div class="body2" style="width: 75%">
+            <h1 style="text-align: center;color:#AF21CB ">@Model.TestAdi</h1>
+            <hr />
+            <table class="table table-hover table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Çözen</th>
+                    <th>Doğru Sayısı</th>
+                    <th>Yanlış Sayısı</th>
+                    <th>Kankalık</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.IstatistikModels)
+                {
+                    <tr  onclick="location.href = '@Url.Action("CozulmusTest", "Istatistik",  item)'">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.cozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DogruSayisi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.YanlisSayisi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Kankalik)
+                        </td>
+                    </tr>
+                }
+                @if (Model.IstatistikModels.Count == 0)
+                {
+                    <tr><td COLSPAN="7" class="text-center">Testinizin İstatistiği Bulunmamaktadır.</td> </tr>
+
+                }
+
+               
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sagDiv">
+            <div class="sagDivHeader row"><a>BFF</a></div>
+            <hr/>
+            <div class="cizgi"></div>
+            <div class="row sagDivBody">
+            @foreach (var item in Model.bfflist)
+            {
+                <a>@item</a>
+            }
+            @if (Model.bfflist.Count == 0)
+            {
+                <a>Hiç BFF'niz Yok</a>
+            }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

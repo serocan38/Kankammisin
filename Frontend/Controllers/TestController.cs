@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Frontend.Models;
 using Frontend.Validation;
+using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +21,6 @@ using Controller = Microsoft.AspNetCore.Mvc.Controller;
 
 namespace Frontend.Controllers
 {
-    [Authorize(AuthenticationSchemes = "JwtBearer")]
     public class TestController : Controller
     {
         private readonly KankammisinContext _context;
@@ -37,11 +37,9 @@ namespace Frontend.Controllers
         }
 
 
-        [Authorize(Roles = "Kullanici,Admin")]
-        public IActionResult TestCoz()
-        {
-            return View();
-        }
+
+
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
@@ -61,6 +59,38 @@ namespace Frontend.Controllers
         }
 
         [Authorize(Roles = "Kullanici,Admin")]
+        public ActionResult TestIstatistik(string testAdi)
+        {
+            string currentUsername = HttpContext.Session.GetString("username");
+            ViewData["username"] = currentUsername;
+            var istatistikModel = _context.Istatistik.Where(i => i.testAdi == testAdi && i.cozulen == currentUsername).ToList();
+            var liste = istatistikModel.Where(i => i.Kankalik == "BFF").ToList();
+            List<String> a = new List<string>();
+            if (!liste.IsNullOrEmpty())
+            {
+                for (int i = 0; i < liste.Count; i++)
+                {
+                    a.Add(liste[i].cozen);
+                }
+            }
+            TestAdiTestModel testAdiTestModel = new TestAdiTestModel
+            {
+                TestAdi = testAdi,
+                IstatistikModels = istatistikModel,
+                bfflist = a
+            };
+            if (istatistikModel.Count != 0)
+            {
+                var cozulenKullanici = istatistikModel.Where(i => i.cozulen == currentUsername);
+                if (cozulenKullanici.FirstOrDefault().cozulen != currentUsername)
+                    return RedirectToAction("Error", "Error", new { hata = "Bu Sayfaya Girebilmek İçin Yetkniz Bulunmamaktadır" });
+            }
+
+
+            return View(testAdiTestModel);
+        }
+
+        [Authorize(Roles = "Kullanici,Admin")]
         public async Task<ActionResult> GetTest()
         {
 
@@ -69,67 +99,74 @@ namespace Frontend.Controllers
             _context.RemoveRange(boslink);
             _context.SaveChanges();
             var currentUsername = HttpContext.Session.GetString("username");
-            var testModel = await _context.Testler.Where(t => t.TestSahibi.Equals(currentUsername)).ToListAsync();
+            ViewData["username"] = currentUsername;
 
-            if (currentUsername==null)
+            var testModel = await _context.Testler.Where(t => t.TestSahibi.Equals(currentUsername)).ToListAsync();
+            foreach (var a in testModel)
             {
-                return RedirectToAction("noLogin", "Login",new{url= "https://localhost:44310/test/gettest" });
+                a.TestCozulmeSayisi = _context.CozulenTest.Where(c => c.testId == a.TestId).Count();
             }
-            if (testModel == null)
+
+            _context.SaveChanges();
+            if (currentUsername == null)
             {
-                ModelState.AddModelError("bostest", "Hiç Testiniz Bulunmamaktadır");
-                return View();
+                return RedirectToAction("noLogin", "Login", new { url = "https://localhost:44310/test/gettest" });
             }
             var s = new HttpClient();
             return View(testModel.ToList());
         }
 
-        [Authorize(Roles = "Kullanici,Admin")]
-        [HttpGet]
-        public async Task<ActionResult> TestCoz(String link)
+
+
+        public ActionResult TestCoz(String link)
         {
             var currentUsername = HttpContext.Session.GetString("username");
-            if (currentUsername == null)
-            {
-                return RedirectToAction("noLogin", "Login", new { url = link });
-            }
-          /*  var varmi = from t in _context.Testler
-                join c in _context.CozulenTest on t.TestId equals c.testId
-                join i in _context.Istatistik on c.cozen equals i.cozen
-                select new{i,cozen=currentUsername};*/
-           
+            ViewData["username"] = currentUsername;
 
             String[] parametreler = link.Split("-");
-            if (currentUsername ==parametreler[0])
-                return BadRequest("KENDİ TESTİNİZİ ÇÖZEMEZSİNİZ");
+            if (currentUsername == parametreler[0])
+            {
+                return RedirectToAction("Error", "Error", new { hata = "Maalesef Kendi Testinizi Çözemezsiniz" });
+            }
+            if (!_context.CozulenTest.Where(c => c.cozen == currentUsername).IsNullOrEmpty())
+            {
+                return RedirectToAction("Error", "Error", new { hata = "Maalesef Kendi Testinizi Çözemezsiniz" });
+            }
             int testid = Int32.Parse(parametreler[1]);
-            var soruModels = await _context.Sorular.Where(s => s.testId ==testid).ToListAsync();
+            var soruModels = _context.Sorular.Where(s => s.testId == testid).ToList();
             for (int i = 0; i < soruModels.Count; i++)
             {
                 soruModels[i].dogruCevap = 5;
             }
+
+
+            var testModel = _context.Testler.Where(t => t.TestId == soruModels[0].testId).FirstOrDefault();
+            ViewData["testAdi"] = testModel.TestAdi;
+
+
+
             return View(soruModels.ToList());
         }
+
+
+
 
         [Authorize(Roles = "Kullanici,Admin")]
         public ActionResult TestSil(TestModel testModel)
         {
             ExistCheck e = new ExistCheck(_context);
-             e.TestSil(testModel);
+            e.TestSil(testModel);
             return RedirectToAction("GetTest", "Test");
         }
 
-        [Authorize(Roles = "Kullanici,Admin")]
         [HttpPost]
         public async Task<ActionResult> TestCoz(List<SoruModel> soru)
         {
             int _dogruSayisi = 0;
             var currentUsername = HttpContext.Session.GetString("username");
-            if (currentUsername == null)
-            {
-                return BadRequest("LÜTFEN GİRİŞ YAPINIZ");
-            }
-            
+            string UUID = "anonim" + System.Guid.NewGuid();
+
+
             var soruModels = await _context.Sorular.Where(s => s.testId == soru[0].testId).ToListAsync();
             var testModels = await _context.Testler.Where(t => t.TestId == soru[0].testId).ToListAsync();
             string[] secilen = new String[soruModels.Count];
@@ -141,32 +178,45 @@ namespace Frontend.Controllers
                 }
                 secilen[i] = soru[i].dogruCevap.ToString();
             }
-            string result = string.Join("",secilen);
+            string result = string.Join("", secilen);
 
-            CozulenTestModel cozulenTestModel = new CozulenTestModel
-            {
-                testId = soruModels[0].testId,
-                cozen = currentUsername,
-                secilenCevaplar = result
-            };
+            CozulenTestModel cozulenTestModel = new CozulenTestModel();
 
-            
+            cozulenTestModel.testId = soruModels[0].testId;
+            cozulenTestModel.secilenCevaplar = result;
             int _yanlisSayisi = soru.Count - _dogruSayisi;
             IstatistikModel istatistik = new IstatistikModel
             {
                 testAdi = testModels[0].TestAdi,
                 YanlisSayisi = _yanlisSayisi,
+                testId = testModels[0].TestId,
                 DogruSayisi = _dogruSayisi,
-                cozen = currentUsername,
                 cozulen = testModels[0].TestSahibi,
-                Kankalik = KankalikHesapla(soru.Count,_dogruSayisi)
-                
+                Kankalik = KankalikHesapla(soru.Count, _dogruSayisi)
             };
+
+            if (currentUsername.IsNullOrEmpty())
+            {
+                cozulenTestModel.cozen = UUID;
+                istatistik.cozen = UUID;
+            }
+            
+            else
+            {
+                cozulenTestModel.cozen = currentUsername;
+                istatistik.cozen = currentUsername;
+            }
             _context.CozulenTest.Add(cozulenTestModel);
             _context.Istatistik.Add(istatistik);
             _context.SaveChanges();
+            HttpContext.Session.SetString("uuid", UUID);
+            HttpContext.Session.SetString("testadi", istatistik.testAdi);
 
-            return RedirectToAction("GetTest","Test");
+            if (currentUsername.IsNullOrEmpty())
+            {
+                return RedirectToAction("AnonymusRegister", "Register");
+            }
+            return RedirectToAction("GetTest", "Test");
         }
 
 
@@ -178,7 +228,7 @@ namespace Frontend.Controllers
         {
             float yuzdelik = (float)((float)dogruSayisi / soruSayisi * 100.0);
             if (yuzdelik >= 100)
-                return "BFF.";
+                return "BFF";
             if (yuzdelik > 93)
                 return "Sırdaş Kankam.";
             if (yuzdelik > 65)

@@ -13,7 +13,6 @@ namespace Frontend.Models
         public string ad { get; set; }
         public string soyad { get; set; }
         public string email { get; set; }
-        [Required(ErrorMessage = "Please Enter Your Name")]
         public string kullaniciAdi { get; set; }
 
     }

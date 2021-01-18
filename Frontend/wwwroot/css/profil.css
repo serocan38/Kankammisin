@@ -1,0 +1,37 @@
+﻿html, body {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-family: candara;
+    background-position: center;
+}
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.body2 {
+    margin-top: 4%;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5%;
+    border-radius: 15px;
+}
+.guncelleBtn {
+    border-radius: 20px;
+    background-color: #AF21CB;
+    text-align: center;
+    padding: 5px 50px 5px 50px;
+    border: 0;
+    margin-top: 10px;
+    color: #fff;
+}
+.hata {
+    color: #FE3360;
+    margin-top: 10px;
+    font-weight: bold;
+}

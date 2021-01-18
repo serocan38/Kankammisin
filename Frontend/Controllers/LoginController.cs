@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +12,7 @@ using Core.Utilities.Security.Jwt;
 using Frontend.Models;
 using Frontend.Validation;
 using IdentityModel;
+using IdentityServer4.Extensions;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,12 +27,13 @@ namespace Frontend.Controllers
         Uri baseAddress = new Uri("https://localhost:44388/api/");
         private IAuthService _authService;
         private IUserService _userService;
+        private KankammisinContext _context;
 
-
-        public LoginController(IAuthService authService, IUserService userService)
+        public LoginController(IAuthService authService, IUserService userService,KankammisinContext context)
         {
             _authService = authService;
             _userService = userService;
+            _context = context;
 
         }
 
@@ -39,14 +42,33 @@ namespace Frontend.Controllers
 
         public IActionResult Index()
         {
+            var intentUrl = HttpContext.Session.GetString("intentUrl");
+            if (!intentUrl.IsNullOrEmpty())
+            {
+                ModelState.AddModelError("noLogin", "Devam Etmek İçin Giriş Yapmanız Gerekmektedir");
+            }
+            var currentUsername = HttpContext.Session.GetString("username");
+
+            if (!currentUsername.IsNullOrEmpty())
+            {
+                return RedirectToAction("GetTest", "Test");
+            }
             return View();
         }
 
         [HttpPost]
         public async Task<ActionResult> Index(LoginsModel loginsModel)
         {
+            var cozen = HttpContext.Session.GetString("uuid");
+            if (loginsModel.password.IsNullOrEmpty() || loginsModel.id.IsNullOrEmpty())
+            {
+                ModelState.AddModelError("kullanicihata", "Lütfen Boş Bırakmayınız");
+                return View();
+            }
+
+
             var httpclient = new HttpClient();
-                using (var handler = new HttpClientHandler())
+            using (var handler = new HttpClientHandler())
             {
                 handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
                 using (var client = new HttpClient(handler))
@@ -59,16 +81,36 @@ namespace Frontend.Controllers
 
                     HttpResponseMessage Res = await client.GetAsync("auth/islogin?id=" + loginsModel.id +
                                                                     "&password=" + loginsModel.password);
-                    
+
                     if (Res.IsSuccessStatusCode)
                     {
                         var result = _userService.GetByUsername(loginsModel.id);
-                        HttpContext.Session.SetString("username", loginsModel.id); 
+                        HttpContext.Session.SetString("username", loginsModel.id);
                         var token = _authService.CreateAccessToken(result);
                         HttpContext.Session.SetString("JWToken", token.Data.Token);
-                        ViewData["username"] = loginsModel.id;
 
+                        var intentUrl = HttpContext.Session.GetString("intentUrl");
+                        HttpContext.Session.Remove("intentUrl");
+                        if (!intentUrl.IsNullOrEmpty())
+                        {
+                            Redirect(intentUrl);
+                        }
+                        if (!cozen.IsNullOrEmpty())
+                        {
+                            var c = _context.Istatistik.Where(a => a.cozen == loginsModel.id).Where(c => c.testAdi == HttpContext.Session.GetString("testadi")).FirstOrDefault();
+                            HttpContext.Session.Remove("testadi");
 
+                            if (c!=null)
+                            {
+                                string hata1 = "Bu Testi Daha Önce Çözmüşsünüz.";
+                                return RedirectToAction("Error","Error", new { hata = hata1 });
+                            }
+                            _context.CozulenTest.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
+                            _context.Istatistik.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
+                            _context.SaveChanges();
+                            HttpContext.Session.Remove("uuid");
+
+                        }
 
                         return RedirectToAction("GetTest", "Test");
                     }
@@ -79,7 +121,7 @@ namespace Frontend.Controllers
                     }
                 }
             }
-        
+
         }
 
         [HttpPost]

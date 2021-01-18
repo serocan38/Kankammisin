@@ -1,26 +1,25 @@
 ﻿html, body {
-    background-size: cover;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
-    height: 100%;
-    font-family: 'Numans', sans-serif;
+    background-position: center;
+    font-family: candara;
 }
 
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
 
 .container {
     height: 100%;
     align-content: center;
 }
 
-.card {
-    height: auto;
-    margin-top: 15%;
-    margin-bottom: auto;
-    width: 400px;
-    background-color: rgba(0,0,0,0.5) !important;
-}
 
 .emsg {
-    color: red;
+    color: #FE3360;
 }
 .hidden {
     display: none
@@ -31,7 +30,8 @@
     margin-top: 15%;
     margin-bottom: auto;
     width: 400px;
-    background-color: rgba(0,0,0,0.5) !important;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
 }
 
 .social_icon span {
@@ -81,32 +81,40 @@
 
 
 .links {
-    margin-bottom: 25px;
+    margin-bottom: 8px;
 }
 
-.links a {
-    margin-left: 4px;
-}
+
 
 .register_btn {
     color: black;
-    background-color: #44ff88;
+    background-color: #14DAC9;
     width: 250px;
     height: 40px;
     margin-top: 15px;
-    
 }
 .loginn_btn {
     color: black;
-    background-color: #44ff88;
+    background-color: #14DAC9;
     width: 250px;
     height: 40px;
+    margin-bottom: 10px;
 }
 .footer_margin {
     margin-top: 25px;
 }
 .hata {
-    color: red;
+    color: #FE3360;
     margin-top: 10px;
+    margin-bottom: 10px;
     font-weight: bold;
+}
+.headerLogin {
+    color: #fff;
+    text-align: center;
+    margin-top: 4%;
+}
+.card-body1 {
+    padding: 1% 5% 1% 5% ;
+
 }

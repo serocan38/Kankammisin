@@ -6,6 +6,7 @@ using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Frontend.Models;
+using Frontend.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -105,10 +106,9 @@ namespace Frontend
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
 
@@ -132,7 +132,6 @@ namespace Frontend
 
             app.UseAuthorization();
 
-      
             app.UseEndpoints(endpoints =>
              {
                  endpoints.MapControllerRoute(

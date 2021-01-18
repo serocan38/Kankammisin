@@ -12,7 +12,6 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
     public class ProductsController : ControllerBase
     {
         private IProductService _productService;
@@ -21,10 +20,7 @@ namespace WebAPI.Controllers
         {
             _productService = productService;
         }
-
         [HttpGet("getall")]
-        [EnableCors("sero")]
-
         public IActionResult GetList()
         {
             var result = _productService.GetList();
@@ -32,7 +28,6 @@ namespace WebAPI.Controllers
             {
                 return Ok(result.Data);
             }
-
             return BadRequest(result.Message);
         }
     }

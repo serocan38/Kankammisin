@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Frontend.Models.TestModel>
+﻿@model List<Frontend.Models.TestModel>
 
 @{
     ViewData["Title"] = "GetTest";
@@ -8,64 +8,75 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
-    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/test.css"/>
+    <link rel="stylesheet" href="~/css/test.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.bootstrap4.min.css" />
 
 </head>
-<body >
-@{
-    int i = 0;
-}
+<body background="/Images/bg2.jpeg"> 
+    @{
+        int i = 0;
+    }
 
-<div class="jumbotron body2">
+    <div class="body2">
 
-    <div class="center">
-        <h1>Testlerim</h1>
+            <h1>Testlerim</h1>
+            <hr/>
+        <table id="table" class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Test Adı</th>
+                    <th scope="col">Test Soru Sayısı</th>
+                    <th scope="col">Testi Çözen Sayısı</th>
+                    <th scope="col">Test Linki</th>
+                    <th style="text-align: center" scope="col">Sil</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+          
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td onclick="location.href = '@Url.Action("TestIstatistik", "Test", new {testadi = item.TestAdi})'"> @Html.DisplayFor(modelItem => item.TestAdi)</td>
+                    <td onclick="location.href = '@Url.Action("TestIstatistik", "Test", new {testadi = item.TestAdi})'"> @Html.DisplayFor(modelItem => item.TestSoruSayisi)</td>
+                    <td onclick="location.href = '@Url.Action("TestIstatistik", "Test", new {testadi = item.TestAdi})'"> @Html.DisplayFor(modelItem => item.TestCozulmeSayisi)</td>
+                    <td>
+                        <a id="link">@Html.DisplayFor(modelItem => item.TestLinki, new {id = "linkk" + i})</a>
+                        <button class="far fa-copy kopyalaicon" onclick="kopyalama(this)"></button>
+                    </td>
+                    <td style="text-align: center">
+                        <a href="@Url.Action("TestSil", "Test", item)" class="fas fa-trash"></a>
+                    </td>
+                </tr>
+                @Html.ValidationMessage("bostest")
+
+                i++;
+            }
+            @if (Model.Count == 0)
+            {
+                <tr onclick="location.href = '@Url.Action("setTest", "TestOlustur")'">
+                    <td COLSPAN="5" class="text-center">Hiç Testiniz Yok.Buraya Tıkla Hemen Test Oluştur</td>
+                </tr>
+
+            }
+
+            </tbody>
+        </table>
+
     </div>
-    <table class="table table-hover table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Test Adı</th>
-            <th scope="col">Test Sahibi</th>
-            <th scope="col">Test Soru Sayısı</th>
-            <th scope="col">TestLinki</th>
 
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td> @Html.DisplayFor(modelItem => item.TestId)</td>
-                <td> @Html.DisplayFor(modelItem => item.TestAdi)</td>
-                <td> @Html.DisplayFor(modelItem => item.TestSahibi)</td>
-                <td> @Html.DisplayFor(modelItem => item.TestSoruSayisi)</td>
-                <td>
-                    <a id="link">@Html.DisplayFor(modelItem => item.TestLinki, new {id = "linkk" + i})</a>
-                    <button class="far fa-copy kopyalaicon" onclick="kopyalama(this)"></button>
-                </td>
-                <td>
-                    @Html.ActionLink("Sil", "TestSil", "Test", item, null)
-                </td>
-            </tr>
-            @Html.ValidationMessage("bostest")
-
-            i++;
-        }
-        </tbody>
-    </table>
-
-</div>
-
-
-
-<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/test.js" asp-append-version="true"></script>
+    @section Scripts
+    {
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    }
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/test.js" asp-append-version="true"></script>
 
 </body>
+</html>

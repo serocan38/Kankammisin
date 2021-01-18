@@ -1,13 +1,22 @@
 ﻿.customNavbar {
-    background-color: #FDD55E;
-    justify-content: space-between;
-    padding: 0% 0% 5% 5%;
+    background-color: transparent;
 }
 .item {
-    color: #eee;
+    color: #fff;
+    margin-top: -6px;
 }
 .logo {
-    background-image: url("../Images/KankammisinLogom.png");
     width: 50px;
     height: 50px;
+}
+.logout {
+    width: 25px;
+    height: 25px;
+}
+hr {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+body {
+    font-family: candara;
 }

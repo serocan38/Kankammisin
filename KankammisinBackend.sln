@@ -12,6 +12,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{1E2B358E-8687-4B80-B6B0-2C296FF4E3FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{E577D475-8C09-47DF-80E1-A7C6BE275AF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF1B4F31-FB87-4B01-93AC-7038CA2EDA83} = {DF1B4F31-FB87-4B01-93AC-7038CA2EDA83}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Frontend.csproj", "{DF1B4F31-FB87-4B01-93AC-7038CA2EDA83}"
 EndProject

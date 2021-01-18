@@ -23,13 +23,23 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
-        [EnableCors("sero")]
-
         //  [Authorize(Roles = "Product.List")]
-
         public IActionResult GetList()
         {
             var result = _testService.GetList();
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest("olmadı");
+        }
+
+        [HttpGet("gettest")]
+        //  [Authorize(Roles = "Product.List")]
+        public IActionResult GetTest()
+        {
+            var result = _testService.GetById(106);
             if (result.Success)
             {
                 return Ok(result.Data);

@@ -14,15 +14,6 @@
             dataType: "json",
             success: function(users) {
                 JSON.parse(JSON.stringify(users));
-                console.log(users.id);
-                console.log("sero ", users.kullaniciAdi);
-                var a = String(users.kullaniciadi);
-
-
-                //  $.post("Test/GetTest/", { kullaniciAdi: users.kullaniciadi }, function (data) {});
-                //   var url = '/Test/gettest?kullaniciadi=' + users.kullaniciadi;
-                //
-
             },
             error: function(request, message, error) {
                 handleException(request, message, error);

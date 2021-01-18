@@ -11037,7 +11037,8 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\serocan\\.nuget\\packages\\": {}
+    "C:\\Users\\serocan\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
@@ -11048,6 +11049,9 @@
       "packagesPath": "C:\\Users\\serocan\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\serocan\\source\\repos\\KankammisinBackend\\Frontend\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
         "C:\\Users\\serocan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -11061,6 +11065,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
             "C:\\Users\\serocan\\source\\repos\\KankammisinBackend\\Business\\Business.csproj": {
               "projectPath": "C:\\Users\\serocan\\source\\repos\\KankammisinBackend\\Business\\Business.csproj"
@@ -11079,6 +11084,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Autofac": {
             "target": "Package",
@@ -11189,7 +11195,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   },

@@ -25,7 +25,11 @@ namespace Frontend.Controllers
         [HttpGet]
         public async Task<ActionResult> Index()
         {
+            _context.RemoveRange(_context.CozulenTest.Where(c => c.cozen.Contains("anonim")).ToList());
+            _context.RemoveRange(_context.Istatistik.Where(c => c.cozen.Contains("anonim")).ToList());
+            _context.SaveChanges();
             var currentUsername = HttpContext.Session.GetString("username");
+            ViewData["username"] = currentUsername;
             var istatistikModels = await _context.Istatistik.Where(i => i.cozulen == currentUsername).ToListAsync();
 
             return View(istatistikModels);
@@ -38,7 +42,7 @@ namespace Frontend.Controllers
             var currentUsername = HttpContext.Session.GetString("username");
 
 
-            return RedirectToAction("CozulmusTest","Istatistik",istatistikModel);
+            return RedirectToAction("CozulmusTest", "Istatistik", istatistikModel);
         }
 
 
@@ -47,21 +51,23 @@ namespace Frontend.Controllers
         public async Task<ActionResult> CozulmusTest(IstatistikModel istatistikModel)
         {
             var currentUsername = HttpContext.Session.GetString("username");
-            var cozulentest = from i in _context.Istatistik
-                join t in _context.Testler on i.testAdi equals t.TestAdi
-                where i.cozulen == currentUsername
-                select new CozulenTestModel
-                {
-                    testId = t.TestId,
-                    cozen = i.cozen,
-                };
-            var deneme = _context.CozulenTest.Where(c => c.cozen == istatistikModel.cozen).FirstOrDefault();
-            var soru = await _context.Sorular.Where(s => s.testId == cozulentest.FirstOrDefault().testId).ToListAsync();
-           
-            CozunlenTestSoruModel cozunlenTestSoruModel = new CozunlenTestSoruModel();
+            ViewData["username"] = currentUsername;
+            
+            var deneme = _context.CozulenTest.Where(c=>c.testId==istatistikModel.testId).FirstOrDefault();
+            var soru = await _context.Sorular.Where(s => s.testId == istatistikModel.testId).ToListAsync();
 
-            cozunlenTestSoruModel.SoruModels = soru;
-            cozunlenTestSoruModel.SecilenCevaplar = deneme.secilenCevaplar;
+            CozunlenTestSoruModel cozunlenTestSoruModel = new CozunlenTestSoruModel
+            {
+                SoruModels = soru,
+                SecilenCevaplar = deneme.secilenCevaplar,
+                Kankalik = istatistikModel.Kankalik,
+                Cozen = deneme.cozen,
+                TestAdi = istatistikModel.testAdi
+            };
+
+            if (istatistikModel.cozulen != currentUsername)
+                return RedirectToAction("Error", "Error", new { hata = "Bu Sayfaya Girebilmek İçin Yetkniz Bulunmamaktadır" });
+
 
             return View(cozunlenTestSoruModel);
         }

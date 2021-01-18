@@ -35,9 +35,7 @@ namespace Business.Concrete
                 SifreHash = passworHash,
                 SifreSalt = passwordSalt,
                 Status = true
-
             };
-
             _userService.Add(user);
             return new SuccessDataResult<User>(user, "Kayıt Başarılı");
         }

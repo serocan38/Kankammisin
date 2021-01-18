@@ -11,47 +11,87 @@
     <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/Istatistik.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/fixedheader/3.1.6/css/fixedHeader.bootstrap4.min.css" />
 
 </head>
-<body>
-    <div class="jumbotron body2">
-        <h1 class="center">İstatistikler</h1>
-        <table class="table table-hover table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Çözen</th>
-                    <th>Test Adı</th>
-                    <th>Doğru Sayısı</th>
-                    <th>Yanlış Sayısı</th>
-                    <th>Kankalık</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.cozen)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.testAdi)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DogruSayisi)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.YanlisSayisi)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Kankalik)
-                            </td>
-                        <td>
-                            @Html.ActionLink("İncele", "CozulmusTest", "Istatistik", item, null)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+<body background="/Images/bg2.jpeg">
+<div class="jumbotron body2">
+    <h1>İstatistikler</h1>
+    <hr/>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Çözen</th>
+                <th>Test Adı</th>
+                <th>Doğru Sayısı</th>
+                <th>Yanlış Sayısı</th>
+                <th>Kankalık</th>
+                <th style="text-align: center">İncele</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cozen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.testAdi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DogruSayisi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.YanlisSayisi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Kankalik)
+                </td>
+                <td style="text-align: center"  onclick="location.href = '@Url.Action("CozulmusTest", "Istatistik",  item)'">
+                    <a class="fas fa-arrow-right"></a>
+                </td>
+            </tr>
+        }
+        @if (Model.Count() ==0)
+        {
+            <tr onclick="location.href = '@Url.Action("setTest", "TestOlustur")'">
+                <td COLSPAN="6" class="text-center">Hiç Testiniz Yok.Buraya Tıkla Hemen Test Oluştur</td>
+            </tr>
+
+        }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("table").dataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Turkish.json"
+                },
+                "searching": false,
+                "ordering": true,
+                "paging": true,
+                "pagingType": "full_numbers",
+                "pageLength": 10,
+                "responsive": true,
+                "columnDefs": [{
+                    "targets": 4,
+                    "orderable": false
+                }, {
+                    "targets": 5,
+                    "orderable": false
+                }]
+            });
+        });
+    </script> 
+}
 </body>
+</html>
