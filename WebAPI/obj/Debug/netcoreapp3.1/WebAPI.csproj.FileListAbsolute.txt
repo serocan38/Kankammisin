@@ -1,8 +1,5 @@
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
-C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.exe
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.deps.json
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\bin\Debug\netcoreapp3.1\WebAPI.runtimeconfig.json
@@ -72,3 +69,4 @@ C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\obj\Debug\netcoreapp3.1\
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.dll
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.pdb
 C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\obj\Debug\netcoreapp3.1\WebAPI.genruntimeconfig.cache
+C:\Users\serocan\source\repos\KankammisinBackend\WebAPI\obj\Debug\netcoreapp3.1\scopedcss\bundle\WebAPI.styles.css

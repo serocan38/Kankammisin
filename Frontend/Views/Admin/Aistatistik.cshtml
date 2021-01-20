@@ -11,10 +11,12 @@
     List<string> a = new List<string>();
     a.Add("admin");
     a.Add("kullanici");
+    UserModel user = new UserModel();
+
 }
 <div>
 
-@using (Html.BeginForm("Aistatistik", "Admin", FormMethod.Post))
+@using (Html.BeginForm("Aistatistik", "Admin",FormMethod.Post))
 {
     <h4>UserModel</h4>
     <hr/>
@@ -50,6 +52,7 @@
             @Html.DisplayFor(model => model.kullaniciTuru)
 
             @Html.HiddenFor(m => m.userModel.Id)
+           
             @if (!Model.kullaniciTuru.Equals("Kullanici"))
             {
                 <input type="submit" value="Kullanici Yap"/>

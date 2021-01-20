@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Entities.Concrete;
+﻿using Frontend.eskiapi;
 using Microsoft.EntityFrameworkCore;
-using Frontend.Models;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Frontend.Models
@@ -17,7 +11,7 @@ namespace Frontend.Models
         {
         }
         public DbSet<TestModel> Testler { get; set; }
-        public DbSet<UserModel> Users { get; set; }
+        public DbSet<UserdbModel> Users { get; set; }
         public DbSet<SoruModel> Sorular { get; set; }
         public DbSet<IstatistikModel> Istatistik { get; set; }
         private EntityQueryable<TestModel> BosLinkSil { get; set; }

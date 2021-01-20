@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyProductAttribute("Frontend")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04c3fea1361f4d91e34e40eff181000750285333")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2596d43a4e988ca831d8ed1dab7178f224a99a22")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Frontend.Views")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 

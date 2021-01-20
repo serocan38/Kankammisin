@@ -1,12 +1,6 @@
 using System;
-using Business.Abstract;
-using Business.Concrete;
-using Core.Utilities.Security.Encryption;
-using Core.Utilities.Security.Jwt;
-using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
+using Frontend.eskiapi;
 using Frontend.Models;
-using Frontend.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using NETCore.MailKit.Extensions;
-using NETCore.MailKit.Infrastructure.Internal;
 
 
 namespace Frontend
@@ -33,8 +25,16 @@ namespace Frontend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<KankammisinContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("kankammisinString")));
+            /*services.AddDbContext<KankammisinContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("kankammisinString")));*/
+
+           services.AddDbContextPool<KankammisinContext>(
+                options => options.UseMySQL("server=94.73.149.134;port=3306;database=tashteam_com_kankammisin;user=tasht_kanka;password=Tash.156754"));
+           services.AddDbContextPool<BaseContext>(
+               options => options.UseMySQL("server=94.73.149.134;port=3306;database=tashteam_com_kankammisin;user=tasht_kanka;password=Tash.156754"));
+
+
+
             services.AddControllersWithViews();
 
             services.AddDistributedMemoryCache();
@@ -63,30 +63,13 @@ namespace Frontend
             });
 
             
-            services.AddMailKit(config=>config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
 
-            services.AddCors(options =>
+         /*   services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin",
                     builder => builder.WithOrigins("http://localhost:3000"));
-            });
+            });*/
 
-
-            services.AddAuthorization(options =>
-            {
-
-                options.AddPolicy("Product.List",
-                    authBuilder =>
-                    {
-                        authBuilder.RequireRole("Administrators");
-                    });
-
-            });
-
-            services.AddScoped<IUserService, UserManager>();
-            services.AddScoped<IAuthService, AuthManager>();
-            services.AddScoped<IUserDal, EfUserDal>();
-            services.AddScoped<ITokenHelper, JwtHelper>();
 
 
             // services.AddAuthentication("BasicAuthentication")
@@ -126,7 +109,7 @@ namespace Frontend
                 await next();
             });
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+           // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
 

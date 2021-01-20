@@ -1,4 +1,4 @@
-﻿@model Frontend.Models.RegisterModel
+﻿@model Frontend.eskiapi.UserForRegisterDto
 
 @{
     ViewData["Title"] = "Kayıt Ol";
@@ -21,14 +21,14 @@
             <hr/>
                 <div class="card-body1">
 
-                    @using (Html.BeginForm("Aregister", "Register",FormMethod.Post))
+                    @using (Html.BeginForm("AnonymusRegister", "Register",FormMethod.Post))
                     {
                         <p><span id="hataKullaniciAdi" class="emsg hidden">Lütfen Geçerli Kullanıcı Adı Giriniz</span></p>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            @Html.TextBoxFor(m => m.kullaniciadi, "kullaniciadi", new { id = "kullaniciadi", @class = "form-control", placeholder = "Kullanıcı Adı" })
+                            @Html.TextBoxFor(m => m.KullaniciAdi, "kullaniciadi", new { id = "kullaniciadi", @class = "form-control", placeholder = "Kullanıcı Adı" })
                         </div>
 
                         <p><span id="hataAd" class="emsg hidden">Lütfen Geçerli Ad Giriniz</span></p>
@@ -51,7 +51,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                             </div>
-                            @Html.TextBoxFor(m => m.email, "email", new { id = "email", @class = "form-control", placeholder = "Email", type = "text" })
+                            @Html.TextBoxFor(m => m.Email, "email", new { id = "email", @class = "form-control", placeholder = "Email", type = "text" })
                         </div>
 
                         <p><span id="hataSifre" class="emsg hidden">Şifre Minimum 3 Karakterli olmalı</span></p>

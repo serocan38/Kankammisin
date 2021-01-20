@@ -30,7 +30,7 @@ namespace Frontend.Controllers
             ViewData["username"] = currentUsername;
             if (currentUsername == null)
             {
-                HttpContext.Session.SetString("username","https://localhost:44310/testolustur/settest" );
+                HttpContext.Session.SetString("username","https://kankammisin.tashteam/testolustur/settest" );
                 return RedirectToAction("Index", "Login");
             }
 

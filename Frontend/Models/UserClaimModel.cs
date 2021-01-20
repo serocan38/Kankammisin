@@ -7,8 +7,10 @@ namespace Frontend.Models
 {
     public class UserClaimModel
     {
-        public UserModel userModel { get; set; }
         public string kullaniciTuru { get; set; }
+        public UserModel userModel { get; set; }
+      
+
         public UserClaimModel()
         {
             this.userModel = new UserModel();

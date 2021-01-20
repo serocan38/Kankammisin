@@ -19,16 +19,16 @@ namespace Frontend.Controllers
         {
             var currentUsername = HttpContext.Session.GetString("username");
             ViewData["username"] = currentUsername;
-            var currentUser = _context.Users.Where(u => u.kullaniciAdi == currentUsername).FirstOrDefault();
+            var currentUser = _context.Users.Where(u => u.KullaniciAdi == currentUsername).FirstOrDefault();
             return View(currentUser);
         }
         [HttpPost]
-        public IActionResult Index(UserModel userModel)
+        public IActionResult Index(UserdbModel userModel)
         {
             var currentUsername = HttpContext.Session.GetString("username");
-            userModel.kullaniciAdi = currentUsername;
+            userModel.KullaniciAdi = currentUsername;
             ViewData["username"] = currentUsername;
-            if (userModel.ad.IsNullOrEmpty()||userModel.soyad.IsNullOrEmpty()||userModel.email.IsNullOrEmpty())
+            if (userModel.Ad.IsNullOrEmpty()||userModel.Soyad.IsNullOrEmpty()||userModel.Email.IsNullOrEmpty())
             {
                 ModelState.AddModelError("bos", "Lütfen Boş Bırakmayınız");
                 return View(userModel);

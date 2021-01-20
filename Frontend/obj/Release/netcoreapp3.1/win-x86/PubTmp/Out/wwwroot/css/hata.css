@@ -1,0 +1,32 @@
+﻿html, body {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-family: 'Numans', sans-serif;
+    background-position: center;
+}
+
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body2 {
+    margin-top: 10%;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5%;
+    border-radius: 15px;
+}
+.hata {
+    color: #FE3360;
+    font-size: 22px;
+}.yonlendir {
+     margin-top: 3%;
+ }

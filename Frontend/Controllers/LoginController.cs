@@ -1,44 +1,27 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using Business.Abstract;
-using Core.Utilities.Security.Jwt;
+using Frontend.eskiapi;
 using Frontend.Models;
-using Frontend.Validation;
-using IdentityModel;
 using IdentityServer4.Extensions;
-using IdentityServer4.Services;
-using IdentityServer4.Validation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 
 namespace Frontend.Controllers
 {
     public class LoginController : Controller
     {
-        Uri baseAddress = new Uri("https://localhost:44388/api/");
-        private IAuthService _authService;
-        private IUserService _userService;
         private KankammisinContext _context;
-
-        public LoginController(IAuthService authService, IUserService userService,KankammisinContext context)
+        private JwtHelper _jwtHelper;
+        private IConfiguration Configuration;
+        private EfUserDal _efUser;
+        public LoginController( KankammisinContext context, IConfiguration configuration)
         {
-            _authService = authService;
-            _userService = userService;
             _context = context;
-
+            _efUser = new EfUserDal(_context);
+            Configuration = configuration;
         }
-
-
-
 
         public IActionResult Index()
         {
@@ -66,61 +49,59 @@ namespace Frontend.Controllers
                 return View();
             }
 
-
-            var httpclient = new HttpClient();
-            using (var handler = new HttpClientHandler())
+            var userToCheck = _context.Users.Where(u=>u.KullaniciAdi==loginsModel.id).FirstOrDefault() ;
+            if (userToCheck == null)
             {
-                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-                using (var client = new HttpClient(handler))
+                ModelState.AddModelError("kullanicihata", "Kullanıcı Bulunamadı");
+                return View();
+            }
+            else
+            {
+                if (!HashingHelper.VerifyPasswordHash(loginsModel.password, userToCheck.SifreHash,
+                    userToCheck.SifreSalt))
                 {
-                    client.BaseAddress = baseAddress;
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type",
-                        "application/x-www-form-urlencoded; charset=utf-8");
-
-                    HttpResponseMessage Res = await client.GetAsync("auth/islogin?id=" + loginsModel.id +
-                                                                    "&password=" + loginsModel.password);
-
-                    if (Res.IsSuccessStatusCode)
+                    ModelState.AddModelError("kullanicihata", "sifre yanlış");
+                    return View();
+                }
+                else
+                {
+                    var result = _context.Users.Where(u => u.KullaniciAdi == loginsModel.id).FirstOrDefault();
+                    HttpContext.Session.SetString("username", loginsModel.id);
+                    var claims = _efUser.GetClaims(result);
+                    _jwtHelper = new JwtHelper(Configuration);
+                    var token = _jwtHelper.CreateToken(result,claims);
+                    HttpContext.Session.SetString("JWToken", token.Token);
+                    var intentUrl = HttpContext.Session.GetString("intentUrl");
+                    HttpContext.Session.Remove("intentUrl");
+                    if (!intentUrl.IsNullOrEmpty())
                     {
-                        var result = _userService.GetByUsername(loginsModel.id);
-                        HttpContext.Session.SetString("username", loginsModel.id);
-                        var token = _authService.CreateAccessToken(result);
-                        HttpContext.Session.SetString("JWToken", token.Data.Token);
+                        Redirect(intentUrl);
+                    }
 
-                        var intentUrl = HttpContext.Session.GetString("intentUrl");
-                        HttpContext.Session.Remove("intentUrl");
-                        if (!intentUrl.IsNullOrEmpty())
+                    if (!cozen.IsNullOrEmpty())
+                    {
+                        var c = _context.Istatistik.Where(a => a.cozen == loginsModel.id)
+                            .Where(c => c.testAdi == HttpContext.Session.GetString("testadi")).FirstOrDefault();
+                        HttpContext.Session.Remove("testadi");
+
+                        if (c != null)
                         {
-                            Redirect(intentUrl);
-                        }
-                        if (!cozen.IsNullOrEmpty())
-                        {
-                            var c = _context.Istatistik.Where(a => a.cozen == loginsModel.id).Where(c => c.testAdi == HttpContext.Session.GetString("testadi")).FirstOrDefault();
-                            HttpContext.Session.Remove("testadi");
-
-                            if (c!=null)
-                            {
-                                string hata1 = "Bu Testi Daha Önce Çözmüşsünüz.";
-                                return RedirectToAction("Error","Error", new { hata = hata1 });
-                            }
-                            _context.CozulenTest.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
-                            _context.Istatistik.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
-                            _context.SaveChanges();
-                            HttpContext.Session.Remove("uuid");
-
+                            string hata1 = "Bu Testi Daha Önce Çözmüşsünüz.";
+                            return RedirectToAction("Error", "Error", new {hata = hata1});
                         }
 
-                        return RedirectToAction("GetTest", "Test");
+                        _context.CozulenTest.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
+                        _context.Istatistik.Where(c => c.cozen == cozen).FirstOrDefault().cozen = loginsModel.id;
+                        _context.SaveChanges();
+                        HttpContext.Session.Remove("uuid");
+
                     }
-                    else
-                    {
-                        ModelState.AddModelError("kullanicihata", "Kullanıcı Adı veya Şifre Yanlış");
-                        return View();
-                    }
+
+                    return RedirectToAction("GetTest", "Test");
                 }
             }
+
+
 
         }
 

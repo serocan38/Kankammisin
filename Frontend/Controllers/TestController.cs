@@ -110,7 +110,7 @@ namespace Frontend.Controllers
             _context.SaveChanges();
             if (currentUsername == null)
             {
-                return RedirectToAction("noLogin", "Login", new { url = "https://localhost:44310/test/gettest" });
+                return RedirectToAction("noLogin", "Login", new { url = "http://kankammisin.tashteam/test/gettest" });
             }
             var s = new HttpClient();
             return View(testModel.ToList());
@@ -128,9 +128,11 @@ namespace Frontend.Controllers
             {
                 return RedirectToAction("Error", "Error", new { hata = "Maalesef Kendi Testinizi Çözemezsiniz" });
             }
-            if (!_context.CozulenTest.Where(c => c.cozen == currentUsername).IsNullOrEmpty())
+
+            var cozulmusmu = _context.CozulenTest.Where(c => c.cozen == currentUsername);
+            if (cozulmusmu.Count()==0)
             {
-                return RedirectToAction("Error", "Error", new { hata = "Maalesef Kendi Testinizi Çözemezsiniz" });
+                return RedirectToAction("Error", "Error", new { hata = "Bu Testi Daha Önce Çözmüşsünüz" });
             }
             int testid = Int32.Parse(parametreler[1]);
             var soruModels = _context.Sorular.Where(s => s.testId == testid).ToList();

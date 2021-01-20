@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Business.Abstract;
+using Frontend.eskiapi;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Frontend.Models;
-using IdentityServer4.Extensions;
+using Frontend.Validation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Frontend.Controllers
@@ -19,14 +17,15 @@ namespace Frontend.Controllers
     public class RegisterController : Controller
     {
         private readonly KankammisinContext _context;
-        Uri baseAddress = new Uri("https://localhost:44388/api/");
-        private IAuthService _authService;
-        private IUserService _userService;
-        public RegisterController(KankammisinContext context, IAuthService authService, IUserService userService)
+
+        private JwtHelper _jwtHelper;
+        private IConfiguration Configuration;
+        private EfUserDal _efUser;
+        public RegisterController(KankammisinContext context,IConfiguration configuration)
         {
             _context = context;
-            _authService = authService;
-            _userService = userService;
+            _efUser = new EfUserDal(_context);
+            Configuration = configuration;
         }
 
 
@@ -45,58 +44,112 @@ namespace Frontend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Aregister(RegisterModel user)
+        public async Task<ActionResult> AnonymusRegister(UserForRegisterDto userForRegisterDto)
         {
             var cozen = HttpContext.Session.GetString("uuid");
 
-            var httpclient = new HttpClient();
-            using (var handler = new HttpClientHandler())
+            if (userForRegisterDto.Email == null || userForRegisterDto.KullaniciAdi==null || userForRegisterDto.ad == null || userForRegisterDto.soyad== null)
             {
-                handler.ServerCertificateCustomValidationCallback = (request, cert, chain, errors) => true;
-                using (var client = new HttpClient(handler))
-                {
-                    client.BaseAddress = baseAddress;
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type",
-                        "application/x-www-form-urlencoded; charset=utf-8");
-
-                    /*    HttpResponseMessage Res = await client.GetAsync("auth/register?kullaniciadi=" + model.RegisterModels.kullaniciadi +
-                                                                        "&email=" + model.RegisterModels.email +
-                                                                        "&password=" + model.RegisterModels.password +
-                                                                        "&ad=" + model.RegisterModels.ad +
-                                                                        "&soyad=" + model.RegisterModels.soyad);
-                    */
-                    HttpResponseMessage resNews =
-                        await client.PostAsync("auth/register", new StringContent(JsonConvert.SerializeObject(user),
-                            Encoding.UTF8, "application/json"));
-
-                    if (resNews.IsSuccessStatusCode)
-                    {
-                        var result = _userService.GetByUsername(user.kullaniciadi);
-                        HttpContext.Session.SetString("username", user.kullaniciadi);
-                        var token = _authService.CreateAccessToken(result);
-                        HttpContext.Session.SetString("JWToken", token.Data.Token);
-
-                        _context.CozulenTest.Where(c => c.cozen == cozen).FirstOrDefault().cozen = user.kullaniciadi;
-                        _context.Istatistik.Where(c => c.cozen == cozen).FirstOrDefault().cozen = user.kullaniciadi;
-                        _context.SaveChanges();
-                        HttpContext.Session.Remove("uuid");
-
-
-
-                        return RedirectToAction("GetTest", "Test");
-
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("kullanicihata", "Kullanıcı Adı veya Şifre Yanlış");
-                        return RedirectToAction("AnonymusRegister", "Register");
-                    }
-                }
+                ModelState.AddModelError("kullanicihata", "Lütfen Heryeri Doldurunuz");
+                return RedirectToAction("Index", "Register");
             }
 
+            var hasKullaniciAdi = _context.Users.Where(u => u.KullaniciAdi == userForRegisterDto.KullaniciAdi);
+            if (hasKullaniciAdi.Count() != 0)
+            {
+                ModelState.AddModelError("kullanicihata", "Kullanıcı Adı Bulunmaktadır");
+                return RedirectToAction("Index","Register");
+            }
+            byte[] passwordSalt, passworHash;
+            HashingHelper.CreatePasswordHash(userForRegisterDto.password, out passworHash, out passwordSalt);
+            var user = new UserdbModel
+            {
+                KullaniciAdi = userForRegisterDto.KullaniciAdi,
+                Email = userForRegisterDto.Email,
+                Ad = userForRegisterDto.ad,
+                Soyad = userForRegisterDto.soyad,
+                SifreHash = passworHash,
+                SifreSalt = passwordSalt,
+                Status = true
+            };
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            var current = _context.Users.Where(u => u.KullaniciAdi == userForRegisterDto.KullaniciAdi).FirstOrDefault();
 
+                UserOperationClaim userOperation = new UserOperationClaim
+                {
+                    UserId = current.ID,
+                    OperationClaimId = 2
+                };
+                _context.UserOperationClaims.Add(userOperation);
+                _context.SaveChanges();
+                        var result = _context.Users.Where(u => u.KullaniciAdi == user.KullaniciAdi) as UserdbModel;
+            HttpContext.Session.SetString("username", user.KullaniciAdi);
+            _jwtHelper = new JwtHelper(Configuration);
+            var claims = _efUser.GetClaims(user);
+            var token = _jwtHelper.CreateToken(user,claims);
+            HttpContext.Session.SetString("JWToken", token.Token);
+
+            _context.CozulenTest.Where(c => c.cozen == cozen).FirstOrDefault().cozen = user.KullaniciAdi;
+            _context.Istatistik.Where(c => c.cozen == cozen).FirstOrDefault().cozen = user.KullaniciAdi;
+            _context.SaveChanges();
+            HttpContext.Session.Remove("uuid");
+
+            return RedirectToAction("GetTest", "Test");
+        }
+        public IActionResult Aregister()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Aregister(UserForRegisterDto userForRegisterDto)
+        {
+            var cozen = HttpContext.Session.GetString("uuid");
+
+            if (userForRegisterDto.Email == null || userForRegisterDto.KullaniciAdi == null || userForRegisterDto.ad == null || userForRegisterDto.soyad == null)
+            {
+                ModelState.AddModelError("kullanicihata", "Lütfen Heryeri Doldurunuz");
+                return RedirectToAction("Index", "Register");
+            }
+
+            var hasKullaniciAdi = _context.Users.Where(u => u.KullaniciAdi == userForRegisterDto.KullaniciAdi);
+            if (hasKullaniciAdi.Count() != 0)
+            {
+                ModelState.AddModelError("kullanicihata", "Kullanıcı Adı Bulunmaktadır");
+                return RedirectToAction("Index", "Register");
+            }
+            byte[] passwordSalt, passworHash;
+            HashingHelper.CreatePasswordHash(userForRegisterDto.password, out passworHash, out passwordSalt);
+            var user = new UserdbModel
+            {
+                KullaniciAdi = userForRegisterDto.KullaniciAdi,
+                Email = userForRegisterDto.Email,
+                Ad = userForRegisterDto.ad,
+                Soyad = userForRegisterDto.soyad,
+                SifreHash = passworHash,
+                SifreSalt = passwordSalt,
+                Status = true
+            };
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            var current = _context.Users.Where(u => u.KullaniciAdi == userForRegisterDto.KullaniciAdi).FirstOrDefault();
+
+            UserOperationClaim userOperation = new UserOperationClaim
+            {
+                UserId = current.ID,
+                OperationClaimId = 2
+            };
+            _context.UserOperationClaims.Add(userOperation);
+            _context.SaveChanges();
+            var result = _context.Users.Where(u => u.KullaniciAdi == user.KullaniciAdi).FirstOrDefault();
+            HttpContext.Session.SetString("username", user.KullaniciAdi);
+            _jwtHelper = new JwtHelper(Configuration);
+            var claims = _efUser.GetClaims(user);
+            var token = _jwtHelper.CreateToken(user, claims);
+            HttpContext.Session.SetString("JWToken", token.Token);
+
+            return RedirectToAction("GetTest", "Test");
         }
 
     }

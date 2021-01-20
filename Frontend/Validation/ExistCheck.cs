@@ -17,7 +17,7 @@ namespace Frontend.Validation
 
         public bool userexist(string username)
         {
-            var hasKullaniciAdi = c.Users.Where(u => u.kullaniciAdi == username);
+            var hasKullaniciAdi = c.Users.Where(u => u.KullaniciAdi == username);
             if (hasKullaniciAdi.Count() != 0)
             {
                 return true;
